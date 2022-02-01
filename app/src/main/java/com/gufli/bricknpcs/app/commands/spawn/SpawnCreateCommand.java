@@ -38,7 +38,7 @@ public class SpawnCreateCommand extends BrickCommand {
             NPCAPI.get().saveSpawn(save);
 
             NPCAPI.get().spawn(player.getInstance(), save);
-            TranslationAPI.get().send(sender, "cmd.spawn.create");
+            TranslationAPI.get().send(sender, "cmd.spawn.create", name);
         }, nameArg, templateArg);
     }
 }

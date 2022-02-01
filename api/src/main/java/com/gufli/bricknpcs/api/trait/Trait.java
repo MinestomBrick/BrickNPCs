@@ -6,8 +6,6 @@ public interface Trait {
 
     default void tick() {}
 
-    default void onCreate() {}
-
     default void onSpawn() {}
 
     default void onRemove() {}

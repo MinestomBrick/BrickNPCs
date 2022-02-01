@@ -7,6 +7,7 @@
   "cmd.error.args.player": "The player {0} is not online.",
   "cmd.error.args.type": "The entity type {0} does not exist.",
   "cmd.error.args.template": "The template {0} does not exist.",
+  "cmd.error.args.uuid": "{0} is not a valid uuid.",
 
   "cmd.npc.create.usage": "Invalid usage, try this: /bn npc create <name> <entitytype>",
   "cmd.npc.create": "Created template and save for an npc at your current location.",
@@ -17,6 +18,10 @@
 
   "cmd.template.edit.customname.invalid": "Invalid usage, try this: /bn template edit customname <template> <name>",
   "cmd.template.edit.customname": "Changed the custom name of {0} to {1}.",
+
+  "cmd.template.edit.skin.usage": "Invalid usage, try this: /bn template edit skin <template> <player-uuid>",
+  "cmd.template.edit.skin.invalid": "{0} is not an existing player.",
+  "cmd.template.edit.skin":  "Changed the skin of {0}.",
 
   "cmd.spawn.create.usage": "Invalid usage, try this: /bn spawn create <name> <template>",
   "cmd.spawn.create.invalid": "A spawn with that name already exists.",

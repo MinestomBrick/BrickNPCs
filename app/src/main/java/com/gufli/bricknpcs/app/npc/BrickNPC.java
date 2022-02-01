@@ -4,42 +4,40 @@ import com.gufli.bricknpcs.api.npc.NPC;
 import com.gufli.bricknpcs.api.npc.NPCSpawn;
 import com.gufli.bricknpcs.api.npc.NPCTemplate;
 import com.gufli.bricknpcs.api.trait.Trait;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Player;
+import net.minestom.server.entity.fakeplayer.FakePlayer;
+import net.minestom.server.entity.fakeplayer.FakePlayerOption;
+import net.minestom.server.entity.hologram.Hologram;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.network.player.FakePlayerConnection;
+import net.minestom.server.network.packet.server.play.TeamsPacket;
+import net.minestom.server.scoreboard.Team;
+import org.apache.commons.lang3.RandomStringUtils;
 
 import java.util.*;
 
 public class BrickNPC implements NPC {
 
-    private final Entity entity;
+    protected Entity entity;
+    protected final NPCSpawn spawn;
+    protected final Set<Trait> traits = new HashSet<>();
 
-    private final NPCSpawn spawn;
-
-    private final Set<Trait> traits = new HashSet<>();
+    protected BrickNPC(NPCSpawn spawn) {
+        this.spawn = spawn;
+        // TODO load traits from template
+    }
 
     public BrickNPC(Instance instance, NPCSpawn spawn) {
-        this.spawn = spawn;
+        this(spawn);
 
-        if (spawn.template().type() == EntityType.PLAYER ) {
-            this.entity = new Player(UUID.randomUUID(), "", new FakePlayerConnection());
-        } else {
-            this.entity = new EntityCreature(spawn.template().type());
-        }
-
-        // TODO load traits from template
-
-        traits.forEach(Trait::onCreate);
+        this.entity = new EntityCreature(spawn.template().type());
+        this.entity.setInstance(instance);
 
         entity.setAutoViewable(true);
-        entity.setInstance(instance);
-        entity.teleport(this.spawn.position());
         refresh();
-
-
 
         traits.forEach(Trait::onSpawn);
     }
@@ -71,19 +69,20 @@ public class BrickNPC implements NPC {
         trait.onDisable();
     }
 
+    public void remove() {
+        traits.forEach(Trait::onRemove);
+        entity.remove();
+    }
+
     @Override
     public void refresh() {
         NPCTemplate template = spawn.template();
 
-        if ( template.customName() != null ) {
+        entity.teleport(spawn.position());
+
+        if (template.customName() != null) {
             entity.setCustomName(template.customName());
             entity.setCustomNameVisible(true);
-        }
-
-        if ( entity instanceof Player player ) {
-            if ( template.skin() != null ) {
-                player.setSkin(template.skin());
-            }
         }
     }
 }

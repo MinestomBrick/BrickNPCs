@@ -11,7 +11,8 @@
       "io.ebean:ebean-ddl-generator:12.14.0",
       "io.ebean:ebean-querybean:12.14.0",
       "com.h2database:h2:2.0.204",
-      "mysql:mysql-connector-java:8.0.27"
+      "mysql:mysql-connector-java:8.0.27",
+      "org.apache.commons:commons-lang3:3.12.0"
     ]
   }
 }

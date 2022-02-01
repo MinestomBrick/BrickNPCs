@@ -19,6 +19,7 @@ dependencies {
     implementation 'com.gufli.brickutils:commands:1.0-SNAPSHOT'
     implementation 'com.gufli.brickutils:scheduling:1.0-SNAPSHOT'
 
+    compileOnly 'org.apache.commons:commons-lang3:3.12.0'
     compileOnly 'com.gufli.brickplaceholders:api:1.0-SNAPSHOT'
 
     compileOnly 'io.ebean:ebean:12.14.0'

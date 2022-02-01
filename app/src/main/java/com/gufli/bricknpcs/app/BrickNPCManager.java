@@ -4,15 +4,16 @@ import com.gufli.bricknpcs.api.NPCManager;
 import com.gufli.bricknpcs.api.npc.NPC;
 import com.gufli.bricknpcs.api.npc.NPCSpawn;
 import com.gufli.bricknpcs.api.npc.NPCTemplate;
-import com.gufli.bricknpcs.api.trait.Trait;
 import com.gufli.bricknpcs.app.data.BrickNPCsDatabaseContext;
 import com.gufli.bricknpcs.app.data.beans.BNPCSpawn;
 import com.gufli.bricknpcs.app.data.beans.BNPCTemplate;
 import com.gufli.bricknpcs.app.data.beans.query.QBNPCSpawn;
 import com.gufli.bricknpcs.app.data.beans.query.QBNPCTemplate;
+import com.gufli.bricknpcs.app.npc.BrickHumanNPC;
 import com.gufli.bricknpcs.app.npc.BrickNPC;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.entity.EntityType;
 import net.minestom.server.event.instance.InstanceChunkLoadEvent;
 import net.minestom.server.event.instance.InstanceChunkUnloadEvent;
 import net.minestom.server.instance.Instance;
@@ -150,15 +151,19 @@ public class BrickNPCManager implements NPCManager {
     @Override
     public void remove(@NotNull NPC npc) {
         npcs.remove(npc);
-        npc.traits().forEach(Trait::onRemove);
-        npc.entity().remove();
+        ((BrickNPC) npc).remove();
     }
 
     @Override
     public NPC spawn(@NotNull Instance instance, @NotNull NPCSpawn spawn) {
-        BrickNPC npc = new BrickNPC(instance, spawn);
+        BrickNPC npc;
+        if ( spawn.template().type() == EntityType.PLAYER ) {
+            npc = new BrickHumanNPC(instance, spawn);
+        } else {
+            npc = new BrickNPC(instance, spawn);
+        }
+
         npcs.add(npc);
-        System.out.println("spawn");
         return npc;
     }
 

@@ -10,5 +10,6 @@ public class TemplateEditCommand extends BrickCommand {
         setupCommandGroupDefaults();
 
         addSubcommand(new TemplateEditCustomNameCommand());
+        addSubcommand(new TemplateEditSkinCommand());
     }
 }

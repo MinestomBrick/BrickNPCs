@@ -16,7 +16,7 @@ public class PlayerSkinConverter implements AttributeConverter<PlayerSkin, Strin
         JsonObject obj = json.getAsJsonObject();
         return new PlayerSkin(
                 obj.get("textures").getAsString(),
-                obj.get("signature").getAsString()
+                obj.has("signature") ? obj.get("signature").getAsString() : null
         );
     };
 
