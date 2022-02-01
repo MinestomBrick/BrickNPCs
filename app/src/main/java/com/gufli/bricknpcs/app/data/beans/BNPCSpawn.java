@@ -3,6 +3,8 @@ package com.gufli.bricknpcs.app.data.beans;
 import com.gufli.bricknpcs.api.npc.NPCSpawn;
 import com.gufli.bricknpcs.api.npc.NPCTemplate;
 import com.gufli.brickutils.database.converters.PosConverter;
+import io.ebean.annotation.ConstraintMode;
+import io.ebean.annotation.DbForeignKey;
 import io.ebean.annotation.Index;
 import net.minestom.server.coordinate.Pos;
 import org.jetbrains.annotations.NotNull;
@@ -21,6 +23,7 @@ public class BNPCSpawn extends BModel implements NPCSpawn {
     private String name;
 
     @ManyToOne
+    @DbForeignKey(onDelete = ConstraintMode.CASCADE)
     public BNPCTemplate template;
 
     @Convert(converter = PosConverter.class, attributeName = "position")

@@ -129,6 +129,9 @@ public class BrickNPCManager implements NPCManager {
         if (spawn(spawn.name()).stream().anyMatch(loc -> loc != spawn)) {
             throw new IllegalArgumentException("A spawn with that name already exists.");
         }
+
+        npcs.stream().filter(npc -> npc.spawn() == spawn).forEach(NPC::refresh);
+
         spawns.add(spawn);
         return databaseContext.saveAsync((BNPCSpawn) spawn);
     }

@@ -1,23 +1,22 @@
-package com.gufli.bricknpcs.app.commands.npc;
+package com.gufli.bricknpcs.app.commands.template;
 
 import com.gufli.bricknpcs.api.NPCAPI;
-import com.gufli.bricknpcs.api.npc.NPCSpawn;
 import com.gufli.bricknpcs.api.npc.NPCTemplate;
 import com.gufli.brickutils.commands.BrickCommand;
 import com.gufli.brickutils.translation.TranslationAPI;
 import net.minestom.server.command.builder.arguments.ArgumentWord;
 import net.minestom.server.entity.EntitySpawnType;
 import net.minestom.server.entity.EntityType;
-import net.minestom.server.entity.Player;
 
-public class NPCCreateCommand extends BrickCommand {
+public class TemplateCreateCommand extends BrickCommand {
 
-    public NPCCreateCommand() {
+    public TemplateCreateCommand() {
         super("create");
 
-        setCondition(b -> b.permission("bricknpcs.npc.create"));
+        setCondition(b -> b.permission("bricknpcs.template.create"));
 
         ArgumentWord nameArg = new ArgumentWord("name");
+        setInvalidUsageMessage("cmd.template.create.usage");
 
         ArgumentWord typeArg = new ArgumentWord("type").from(
                 EntityType.values().stream()
@@ -27,30 +26,21 @@ public class NPCCreateCommand extends BrickCommand {
                         .toArray(String[]::new));
         setInvalidArgumentMessage(typeArg, "cmd.error.args.type");
 
-        setInvalidUsageMessage("cmd.npc.create.usage");
-
         addSyntax((sender, context) -> {
             String name = context.get(nameArg);
-            if (NPCAPI.get().template(name).isPresent()) {
+            if ( NPCAPI.get().template(name).isPresent() ) {
                 TranslationAPI.get().send(sender, "cmd.template.create.invalid", name);
-                return;
-            }
-
-            if (NPCAPI.get().spawn(name).isPresent()) {
-                TranslationAPI.get().send(sender, "cmd.spawn.create.invalid", name);
                 return;
             }
 
             NPCTemplate template = NPCAPI.get().newTemplate(name);
             template.setType(EntityType.fromNamespaceId(context.get(typeArg).toLowerCase()));
 
-            Player player = (Player) sender;
-            NPCSpawn spawn = NPCAPI.get().newSpawn(name, player.getPosition(), template);
+            NPCAPI.get().saveTemplate(template);
 
-            NPCAPI.get().saveTemplate(template).thenRun(() -> NPCAPI.get().saveSpawn(spawn));
-
-            NPCAPI.get().spawn(player.getInstance(), spawn);
-            TranslationAPI.get().send(sender, "cmd.npc.create");
+            TranslationAPI.get().send(sender, "cmd.template.create", name);
         }, nameArg, typeArg);
+
     }
+
 }

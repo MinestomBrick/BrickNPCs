@@ -11,5 +11,8 @@ public class TemplateCommand extends BrickCommand {
         setupCommandGroupDefaults();
 
         addSubcommand(new TemplateEditCommand());
+        addSubcommand(new TemplateDeleteCommand());
+        addSubcommand(new TemplateCreateCommand());
+        addSubcommand(new TemplateListCommand());
     }
 }

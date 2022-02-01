@@ -7,23 +7,36 @@
   "cmd.error.args.player": "The player {0} is not online.",
   "cmd.error.args.type": "The entity type {0} does not exist.",
   "cmd.error.args.template": "The template {0} does not exist.",
-  "cmd.error.args.uuid": "{0} is not a valid uuid.",
+  "cmd.error.args.spawn": "The spawn {0} does not exist.",
 
   "cmd.npc.create.usage": "Invalid usage, try this: /bn npc create <name> <entitytype>",
   "cmd.npc.create": "Created template and save for an npc at your current location.",
 
-  "cmd.template.create.usage": "Invalid usage, try this: /bn template create <name>",
+  "cmd.template.create.usage": "Invalid usage, try this: /bn template create <name> <entitytype>",
   "cmd.template.create.invalid": "A template with that name already exists.",
   "cmd.template.create": "Created {0}.",
+
+  "cmd.template.delete.usage": "Invalid usage, try this: /bn template delete <template>",
+  "cmd.template.delete": "Deleted {0}.",
+
+  "cmd.template.list": "List of templates: {0}",
 
   "cmd.template.edit.customname.invalid": "Invalid usage, try this: /bn template edit customname <template> <name>",
   "cmd.template.edit.customname": "Changed the custom name of {0} to {1}.",
 
-  "cmd.template.edit.skin.usage": "Invalid usage, try this: /bn template edit skin <template> <player-uuid>",
+  "cmd.template.edit.skin.usage": "Invalid usage, try this: /bn template edit skin <template> <player>",
   "cmd.template.edit.skin.invalid": "{0} is not an existing player.",
   "cmd.template.edit.skin":  "Changed the skin of {0}.",
 
   "cmd.spawn.create.usage": "Invalid usage, try this: /bn spawn create <name> <template>",
   "cmd.spawn.create.invalid": "A spawn with that name already exists.",
-  "cmd.spawn.create": "Created spawn {0} at your current location"
+  "cmd.spawn.create": "Created spawn {0} at your current location",
+
+  "cmd.spawn.delete.usage": "Invalid usage, try this: /bn spawn delete <spawn>",
+  "cmd.spawn.delete": "Deleted {0}.",
+
+  "cmd.spawn.edit.lookhere.usage": "Invalid usage, try this: /bn spawn edit lookhere <spawn>",
+  "cmd.spawn.edit.lookhere": "Updated {0} to look in your direction.",
+
+  "cmd.spawn.list": "List of spawns: {0}"
 }
