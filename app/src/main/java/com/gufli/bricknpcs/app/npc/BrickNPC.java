@@ -4,42 +4,45 @@ import com.gufli.bricknpcs.api.npc.NPC;
 import com.gufli.bricknpcs.api.npc.NPCSpawn;
 import com.gufli.bricknpcs.api.npc.NPCTemplate;
 import com.gufli.bricknpcs.api.trait.Trait;
-import net.minestom.server.MinecraftServer;
+import com.gufli.bricknpcs.api.trait.TraitRegistry;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.EntityType;
-import net.minestom.server.entity.Player;
-import net.minestom.server.entity.fakeplayer.FakePlayer;
-import net.minestom.server.entity.fakeplayer.FakePlayerOption;
-import net.minestom.server.entity.hologram.Hologram;
+import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.network.packet.server.play.TeamsPacket;
-import net.minestom.server.scoreboard.Team;
-import org.apache.commons.lang3.RandomStringUtils;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 public class BrickNPC implements NPC {
 
-    protected Entity entity;
+    protected final LivingEntity entity;
     protected final NPCSpawn spawn;
     protected final Set<Trait> traits = new HashSet<>();
 
-    protected BrickNPC(NPCSpawn spawn) {
+    protected BrickNPC(NPCSpawn spawn, LivingEntity entity) {
         this.spawn = spawn;
-        // TODO load traits from template
-    }
+        this.entity = entity;
 
-    public BrickNPC(Instance instance, NPCSpawn spawn) {
-        this(spawn);
-
-        this.entity = new EntityCreature(spawn.template().type());
-        this.entity.setInstance(instance);
+        TraitRegistry.factories(spawn.template()).forEach(factory -> traits.add(factory.create(entity)));
 
         entity.setAutoViewable(true);
         refresh();
 
+        traits.forEach(Trait::onEnable);
         traits.forEach(Trait::onSpawn);
+    }
+
+    public BrickNPC(Instance instance, NPCSpawn spawn) {
+        this(spawn, create(instance, spawn.template().type()));
+    }
+
+    private static LivingEntity create(Instance instance, EntityType type) {
+        LivingEntity entity = new EntityCreature(type);
+        entity.setInstance(instance);
+        return entity;
     }
 
     @Override
@@ -71,6 +74,8 @@ public class BrickNPC implements NPC {
 
     public void remove() {
         traits.forEach(Trait::onRemove);
+        traits.forEach(Trait::onDisable);
+        traits.clear();
         entity.remove();
     }
 
@@ -84,5 +89,18 @@ public class BrickNPC implements NPC {
             entity.setCustomName(template.customName());
             entity.setCustomNameVisible(true);
         }
+
+        Collection<String> templateTraits = template.traits();
+        traits.stream().filter(trait -> !templateTraits.contains(trait.name())).forEach(trait -> {
+            trait.onDisable();
+            traits.remove(trait);
+        });
+
+        templateTraits.stream().filter(name -> traits.stream().noneMatch(trait -> trait.name().equals(name)))
+                .forEach(name -> TraitRegistry.trait(name).ifPresent(factory -> addTrait(factory.create(entity))));
+    }
+
+    public void tick() {
+        traits.forEach(Trait::tick);
     }
 }

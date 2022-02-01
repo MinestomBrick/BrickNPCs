@@ -17,6 +17,7 @@ import net.minestom.server.entity.EntityType;
 import net.minestom.server.event.instance.InstanceChunkLoadEvent;
 import net.minestom.server.event.instance.InstanceChunkUnloadEvent;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.timer.TaskSchedule;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
@@ -33,7 +34,7 @@ public class BrickNPCManager implements NPCManager {
     private final Set<NPCTemplate> templates = new CopyOnWriteArraySet<>();
     private final Set<NPCSpawn> spawns = new CopyOnWriteArraySet<>();
 
-    private final Set<NPC> npcs = new CopyOnWriteArraySet<>();
+    private final Set<BrickNPC> npcs = new CopyOnWriteArraySet<>();
 
     public BrickNPCManager(BrickNPCsDatabaseContext databaseContext) {
         this.databaseContext = databaseContext;
@@ -45,6 +46,7 @@ public class BrickNPCManager implements NPCManager {
             spawns.add(spawn);
         });
 
+        // load npc on chunk load
         MinecraftServer.getGlobalEventHandler().addListener(InstanceChunkLoadEvent.class, e -> {
             Set<NPCSpawn> spawns = this.spawns.stream()
                     .filter(spawn -> spawn.position().chunkX() == e.getChunkX()
@@ -57,9 +59,15 @@ public class BrickNPCManager implements NPCManager {
                     .delay(Duration.of(1, ChronoUnit.SECONDS)).schedule();
         });
 
+        // remove npcs on chunk unload
         MinecraftServer.getGlobalEventHandler().addListener(InstanceChunkUnloadEvent.class, e -> {
             npcs.stream().filter(npc -> npc.entity().getChunk() == e.getChunk()).forEach(this::remove);
         });
+
+        // npc ticking
+        MinecraftServer.getSchedulerManager()
+                .buildTask(() -> npcs.forEach(BrickNPC::tick))
+                .repeat(TaskSchedule.tick(1)).schedule();
     }
 
     //
@@ -153,8 +161,10 @@ public class BrickNPCManager implements NPCManager {
 
     @Override
     public void remove(@NotNull NPC npc) {
-        npcs.remove(npc);
-        ((BrickNPC) npc).remove();
+        BrickNPC bnpc = (BrickNPC) npc;
+
+        npcs.remove(bnpc);
+        bnpc.remove();
     }
 
     @Override

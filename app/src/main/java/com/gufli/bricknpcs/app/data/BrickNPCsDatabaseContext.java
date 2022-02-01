@@ -2,6 +2,7 @@ package com.gufli.bricknpcs.app.data;
 
 import com.gufli.bricknpcs.app.data.beans.BNPCSpawn;
 import com.gufli.bricknpcs.app.data.beans.BNPCTemplate;
+import com.gufli.bricknpcs.app.data.beans.BNPCTemplateTrait;
 import com.gufli.bricknpcs.app.data.converters.EntityTypeConverter;
 import com.gufli.bricknpcs.app.data.converters.PlayerSkinConverter;
 import com.gufli.brickutils.database.context.AbstractDatabaseContext;
@@ -38,6 +39,7 @@ public class BrickNPCsDatabaseContext extends AbstractDatabaseContext {
         // beans
         classes.add(BNPCSpawn.class);
         classes.add(BNPCTemplate.class);
+        classes.add(BNPCTemplateTrait.class);
 
         return classes;
     }

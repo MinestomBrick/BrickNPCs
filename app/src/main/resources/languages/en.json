@@ -8,6 +8,7 @@
   "cmd.error.args.type": "The entity type {0} does not exist.",
   "cmd.error.args.template": "The template {0} does not exist.",
   "cmd.error.args.spawn": "The spawn {0} does not exist.",
+  "cmd.error.args.trait": "The trait {0} does not exist.",
 
   "cmd.npc.create.usage": "Invalid usage, try this: /bn npc create <name> <entitytype>",
   "cmd.npc.create": "Created template and save for an npc at your current location.",
@@ -27,6 +28,15 @@
   "cmd.template.edit.skin.usage": "Invalid usage, try this: /bn template edit skin <template> <player>",
   "cmd.template.edit.skin.invalid": "{0} is not an existing player.",
   "cmd.template.edit.skin":  "Changed the skin of {0}.",
+
+  "cmd.template.trait.list.usage": "Invalid usage, try this: /bn template trait list <template>",
+  "cmd.template.trait.list": "List of traits for {0}: {1}",
+
+  "cmd.template.trait.add.usage": "Invalid usage, try this: /bn template trait add <template> <trait>",
+  "cmd.template.trait.add": "Added trait {1} to {0}.",
+
+  "cmd.template.trait.remove.usage": "Invalid usage, try this: /bn template trait remove <template> <trait>",
+  "cmd.template.trait.remove": "Removed trait {1} from {0}.",
 
   "cmd.spawn.create.usage": "Invalid usage, try this: /bn spawn create <name> <template>",
   "cmd.spawn.create.invalid": "A spawn with that name already exists.",

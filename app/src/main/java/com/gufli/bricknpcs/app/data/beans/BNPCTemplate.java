@@ -13,6 +13,7 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.persistence.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 @Index(columnNames = {"name"}, unique = true)
@@ -34,7 +35,8 @@ public class BNPCTemplate extends BModel implements NPCTemplate {
     @Column(length = 2048)
     private PlayerSkin skin;
 
-    private transient final List<String> traits = new ArrayList<>();
+    @OneToMany(cascade = { CascadeType.ALL }, orphanRemoval = true)
+    private final List<BNPCTemplateTrait> traits = new ArrayList<>();
 
     public BNPCTemplate(String name) {
         this.name = name;
@@ -86,17 +88,24 @@ public class BNPCTemplate extends BModel implements NPCTemplate {
 
     @Override
     public void addTrait(@NotNull String name) {
-        if (traits.contains(name)) return;
-        traits.add(name);
+        if (traits.stream().anyMatch(trait -> trait.name().equals(name))) {
+            return;
+        }
+        traits.add(new BNPCTemplateTrait(this, name));
     }
 
     @Override
     public void removeTrait(@NotNull String name) {
-        traits.remove(name);
+        Optional<BNPCTemplateTrait> trait = traits.stream().filter(t -> t.name().equals(name)).findFirst();
+        if (trait.isEmpty()) {
+            return;
+        }
+
+        traits.remove(trait.get());
     }
 
     @Override
     public @NotNull Collection<String> traits() {
-        return Collections.unmodifiableList(traits);
+        return traits.stream().map(BNPCTemplateTrait::name).collect(Collectors.toSet());
     }
 }

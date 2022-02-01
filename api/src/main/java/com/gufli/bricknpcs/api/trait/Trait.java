@@ -1,19 +1,32 @@
 package com.gufli.bricknpcs.api.trait;
 
-public interface Trait {
+import net.minestom.server.entity.LivingEntity;
+
+public abstract class Trait {
+
+    protected final LivingEntity entity;
+    String name;
+
+    protected Trait(LivingEntity entity) {
+        this.entity = entity;
+    }
+
+    public final String name() {
+        return name;
+    }
 
     // entity lifecycle
 
-    default void tick() {}
+    public void tick() {}
 
-    default void onSpawn() {}
+    public void onSpawn() {}
 
-    default void onRemove() {}
+    public void onRemove() {}
 
     // trait lifecycle
 
-    default void onEnable() {}
+    public void onEnable() {}
 
-    default void onDisable() {}
+    public void onDisable() {}
 
 }

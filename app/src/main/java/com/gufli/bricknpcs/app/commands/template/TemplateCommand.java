@@ -1,6 +1,7 @@
 package com.gufli.bricknpcs.app.commands.template;
 
 import com.gufli.bricknpcs.app.commands.template.edit.TemplateEditCommand;
+import com.gufli.bricknpcs.app.commands.template.trait.TemplateTraitCommand;
 import com.gufli.brickutils.commands.BrickCommand;
 
 public class TemplateCommand extends BrickCommand {
@@ -14,5 +15,6 @@ public class TemplateCommand extends BrickCommand {
         addSubcommand(new TemplateDeleteCommand());
         addSubcommand(new TemplateCreateCommand());
         addSubcommand(new TemplateListCommand());
+        addSubcommand(new TemplateTraitCommand());
     }
 }
