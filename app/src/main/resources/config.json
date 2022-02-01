@@ -1,0 +1,7 @@
+{
+  "database": {
+    "dsn": "jdbc:h2:file:./extensions/BrickNPCs/data/database.h2",
+    "username": "dbuser",
+    "password": "dbuser"
+  }
+}

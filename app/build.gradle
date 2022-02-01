@@ -1,0 +1,46 @@
+plugins {
+    id 'java'
+    id "com.github.johnrengelman.shadow" version "7.1.2"
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'com.gufli.brickncp.BrickNPCs'
+    }
+}
+
+dependencies {
+    implementation project(':api')
+
+    compileOnly 'com.github.Minestom:Minestom:-SNAPSHOT'
+
+    implementation 'com.gufli.brickutils:translation:1.0-SNAPSHOT'
+    implementation 'com.gufli.brickutils:database:1.0-SNAPSHOT'
+    implementation 'com.gufli.brickutils:commands:1.0-SNAPSHOT'
+    implementation 'com.gufli.brickutils:scheduling:1.0-SNAPSHOT'
+
+    compileOnly 'com.gufli.brickplaceholders:api:1.0-SNAPSHOT'
+
+    compileOnly 'io.ebean:ebean:12.14.0'
+    compileOnly 'io.ebean:ebean-ddl-generator:12.14.0'
+    compileOnly 'io.ebean:ebean-querybean:12.14.0'
+    annotationProcessor 'io.ebean:querybean-generator:12.14.0'
+
+}
+
+test {
+    useJUnitPlatform()
+}
+
+shadowJar {
+    archiveClassifier.set("")
+    archiveBaseName.set("${rootProject.name}")
+    archiveVersion.set("${rootProject.version}")
+
+    doLast {
+        copy {
+            from "build/libs/" + archiveFileName.get()
+            into "../../server/extensions"
+        }
+    }
+}

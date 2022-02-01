@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<migration xmlns="http://ebean-orm.github.io/xml/ns/dbmigration">
+    <changeSet type="apply">
+        <createTable name="npc_spawns" identityType="external" pkName="pk_npc_spawns">
+            <column name="id" type="uuid" primaryKey="true" identity="true"/>
+            <column name="name" type="varchar"/>
+            <column name="template_id" type="uuid" references="npc_templates.id" foreignKeyName="fk_npc_spawns_template_id" foreignKeyIndex="ix_npc_spawns_template_id"/>
+            <column name="position" type="varchar"/>
+            <uniqueConstraint name="uq_npc_spawns_name" columnNames="name" oneToOne="false" nullableColumns="name"/>
+        </createTable>
+        <createTable name="npc_templates" identityType="external" pkName="pk_npc_templates">
+            <column name="id" type="uuid" primaryKey="true" identity="true"/>
+            <column name="name" type="varchar"/>
+            <column name="type" type="varchar"/>
+            <column name="skin" type="varchar(2048)"/>
+            <uniqueConstraint name="uq_npc_templates_name" columnNames="name" oneToOne="false" nullableColumns="name"/>
+        </createTable>
+    </changeSet>
+</migration>

@@ -1,0 +1,24 @@
+{
+  "cmd.error.permission": "You don't have permission for this command.",
+  "cmd.error.player-only": "This command can only be executed by a player.",
+  "cmd.error.console-only": "This command can only be executed by the console.",
+
+  "cmd.error.args": "{1} is not a valid {0}.",
+  "cmd.error.args.player": "The player {0} is not online.",
+  "cmd.error.args.type": "The entity type {0} does not exist.",
+  "cmd.error.args.template": "The template {0} does not exist.",
+
+  "cmd.npc.create.usage": "Invalid usage, try this: /bn npc create <name> <entitytype>",
+  "cmd.npc.create": "Created template and save for an npc at your current location.",
+
+  "cmd.template.create.usage": "Invalid usage, try this: /bn template create <name>",
+  "cmd.template.create.invalid": "A template with that name already exists.",
+  "cmd.template.create": "Created {0}.",
+
+  "cmd.template.edit.customname.invalid": "Invalid usage, try this: /bn template edit customname <template> <name>",
+  "cmd.template.edit.customname": "Changed the custom name of {0} to {1}.",
+
+  "cmd.spawn.create.usage": "Invalid usage, try this: /bn spawn create <name> <template>",
+  "cmd.spawn.create.invalid": "A spawn with that name already exists.",
+  "cmd.spawn.create": "Created spawn {0} at your current location"
+}

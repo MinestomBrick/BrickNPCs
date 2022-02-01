@@ -1,0 +1,17 @@
+{
+  "entrypoint": "com.gufli.bricknpcs.app.BrickNPCs",
+  "name": "BrickNPCs",
+  "version": "1.0.0",
+  "externalDependencies": {
+    "repositories": [
+      {"name": "Central", "url": "https://repo1.maven.org/maven2/"}
+    ],
+    "artifacts": [
+      "io.ebean:ebean:12.14.0",
+      "io.ebean:ebean-ddl-generator:12.14.0",
+      "io.ebean:ebean-querybean:12.14.0",
+      "com.h2database:h2:2.0.204",
+      "mysql:mysql-connector-java:8.0.27"
+    ]
+  }
+}

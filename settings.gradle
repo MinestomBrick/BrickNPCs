@@ -1,0 +1,6 @@
+rootProject.name = 'BrickNPCs'
+
+include 'api'
+include 'app'
+include 'scripts'
+

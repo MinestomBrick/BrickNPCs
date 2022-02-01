@@ -1,0 +1,26 @@
+plugins {
+    id 'java'
+}
+
+dependencies {
+    compileOnly 'com.github.Minestom:Minestom:-SNAPSHOT'
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "Jorisg"
+            url = uri("https://repo.jorisg.com/snapshots")
+            credentials(org.gradle.api.credentials.PasswordCredentials)
+        }
+    }
+
+    publications {
+        release(MavenPublication) {
+            from components.java
+            groupId = rootProject.group
+            artifactId = project.name
+            version = rootProject.version
+        }
+    }
+}
