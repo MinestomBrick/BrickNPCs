@@ -2,12 +2,14 @@ package com.gufli.bricknpcs.api.npc;
 
 import com.gufli.bricknpcs.api.trait.Trait;
 import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.EntityCreature;
+import net.minestom.server.entity.LivingEntity;
 
 import java.util.Collection;
 
 public interface NPC {
 
-    Entity entity();
+    EntityCreature entity();
 
     NPCSpawn spawn();
 

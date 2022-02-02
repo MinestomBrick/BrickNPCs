@@ -31,8 +31,8 @@ public class TraitRegistry {
         }
 
         TraitFactory factory = traits.get(name);
-        return Optional.of(entity -> {
-            Trait trait = factory.create(entity);
+        return Optional.of(npc -> {
+            Trait trait = factory.create(npc);
             trait.name = name;
             return trait;
         });
@@ -52,8 +52,8 @@ public class TraitRegistry {
             }
 
             // proxy factory to apply name
-            result.add(entity -> {
-                Trait trait = factory.create(entity);
+            result.add(npc -> {
+                Trait trait = factory.create(npc);
                 trait.name = name;
                 return trait;
             });

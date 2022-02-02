@@ -1,14 +1,14 @@
 package com.gufli.bricknpcs.api.trait;
 
-import net.minestom.server.entity.LivingEntity;
+import com.gufli.bricknpcs.api.npc.NPC;
 
 public abstract class Trait {
 
-    protected final LivingEntity entity;
+    protected final NPC npc;
     String name;
 
-    protected Trait(LivingEntity entity) {
-        this.entity = entity;
+    protected Trait(NPC npc) {
+        this.npc = npc;
     }
 
     public final String name() {

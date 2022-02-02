@@ -1,23 +1,25 @@
 package com.gufli.bricknpcs.api.traits;
 
 import com.extollit.gaming.ai.path.HydrazinePathFinder;
-import com.extollit.gaming.ai.path.SchedulingPriority;
+import com.extollit.gaming.ai.path.model.IDynamicMovableObject;
+import com.extollit.gaming.ai.path.model.INode;
+import com.extollit.gaming.ai.path.model.IPath;
+import com.extollit.linalg.immutable.Vec3d;
+import com.gufli.bricknpcs.api.npc.NPC;
 import com.gufli.bricknpcs.api.trait.Trait;
 import com.gufli.bricknpcs.api.trait.TraitFactory;
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.EntityCreature;
-import net.minestom.server.entity.LivingEntity;
-import net.minestom.server.entity.ai.GoalSelector;
-import net.minestom.server.entity.ai.TargetSelector;
-import net.minestom.server.entity.ai.goal.FollowTargetGoal;
+import net.minestom.server.entity.pathfinding.Navigator;
+import net.minestom.server.network.packet.server.play.ParticlePacket;
+import net.minestom.server.particle.Particle;
+import net.minestom.server.particle.ParticleCreator;
+import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.entity.EntityFinder;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.time.Duration;
-import java.time.temporal.ChronoUnit;
-import java.util.List;
+import java.lang.reflect.Field;
+import java.time.Instant;
 
 public class FollowClosestPlayerTrait extends Trait {
 
@@ -30,110 +32,86 @@ public class FollowClosestPlayerTrait extends Trait {
         entityFinder.setTargetSelector(EntityFinder.TargetSelector.NEAREST_PLAYER);
     }
 
-    protected FollowClosestPlayerTrait(LivingEntity entity) {
-        super(entity);
-        if (!(entity instanceof EntityCreature)) {
-            throw new IllegalArgumentException("Entity must be a creature.");
+    private static Field pathFinderField;
+    static {
+        try {
+            pathFinderField = Navigator.class.getDeclaredField("pathFinder");
+            pathFinderField.setAccessible(true);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
         }
+    }
+
+    //
+
+    private Entity target;
+    private IDynamicMovableObject targetObject;
+
+    private HydrazinePathFinder pathFinder;
+
+    protected FollowClosestPlayerTrait(NPC npc) {
+        super(npc);
+    }
+
+    private Entity findTarget() {
+        return entityFinder.findFirstPlayer(npc.entity().getInstance(), npc.entity());
     }
 
     @Override
     public void onEnable() {
-        EntityCreature creature = (EntityCreature) entity;
-
-        System.out.println("oi");
-        creature.addAIGroup(
-                List.of(new FollowGoal(creature)),
-                List.of(new ClosestPlayerTargetSelector(creature))
-        );
-
-        List.of(new FollowTargetGoal(creature, Duration.of(2, ChronoUnit.SECONDS)));
+        try {
+            pathFinder = (HydrazinePathFinder) pathFinderField.get(npc.entity().getNavigator());
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
-    public void onDisable() {
-        EntityCreature creature = (EntityCreature) entity;
-        // TODO remove AI
+    public void tick() {
+        if ( target != null ) {
+            if (npc.entity().getPosition().distance(target.getPosition()) > 40 ) {
+                pathFinder.reset();
+                this.target = null;
+                this.targetObject = null;
+                return;
+            }
+
+            IPath path = pathFinder.updatePathFor(npc.entity().getNavigator().getPathingEntity());
+
+            if ( path != null ) {
+                for (INode node : path) {
+                    PacketUtils.broadcastPacket(ParticleCreator.createParticlePacket(Particle.FLAME,
+                            node.coordinates().x + .5, node.coordinates().y + .1, node.coordinates().z + .5,
+                            0, 0, 0, 1));
+
+                }
+            }
+            return;
+        }
+
+        target = findTarget();
+        if ( target == null ) {
+            return;
+        }
+
+        targetObject = new IDynamicMovableObject() {
+            @Override
+            public Vec3d coordinates() {
+                return new Vec3d(target.getPosition().x(), target.getPosition().y(), target.getPosition().z());
+            }
+
+            @Override
+            public float width() {
+                return (float) target.getBoundingBox().getWidth();
+            }
+
+            @Override
+            public float height() {
+                return (float) target.getBoundingBox().getHeight();
+            }
+        };
+
+        pathFinder.trackPathTo(targetObject);
     }
 
-    private static class ClosestPlayerTargetSelector extends TargetSelector {
-
-        public ClosestPlayerTargetSelector(@NotNull EntityCreature entityCreature) {
-            super(entityCreature);
-        }
-
-        @Override
-        public @Nullable Entity findTarget() {
-            return entityFinder.findFirstPlayer(entityCreature.getInstance(), entityCreature);
-        }
-    }
-
-    private static class FollowGoal extends GoalSelector {
-
-        private Entity target;
-        private Pos lastTargetPosition;
-        private long totalTime;
-
-//        private final HydrazinePathFinder pathFinder;
-
-        public FollowGoal(@NotNull EntityCreature entityCreature) {
-            super(entityCreature);
-//            pathFinder = new HydrazinePathFinder(entityCreature.getNavigator().getPathingEntity(), entityCreature.getInstance().getInstanceSpace());
-        }
-
-        @Override
-        public boolean shouldStart() {
-            Entity target = entityCreature.getTarget();
-            if (target == null) target = findTarget();
-            if (target == null) return false;
-            final boolean result = target.getPosition().distance(entityCreature.getPosition()) >= 2;
-            if (result) {
-                this.target = target;
-            }
-            return result;
-        }
-
-        @Override
-        public void start() {
-//            entityCreature.getNavigator().setPathFinder(pathFinder);
-        }
-
-        @Override
-        public void tick(long deltaTime) {
-            if (target == null) {
-                return;
-            }
-
-            totalTime += deltaTime;
-            if ( totalTime < 200 ) {
-                return;
-            }
-            totalTime = 0;
-
-            if (lastTargetPosition != null && target.getPosition().sameBlock(lastTargetPosition)) {
-                return;
-            }
-
-            lastTargetPosition = target.getPosition();
-
-            if (entityCreature.getPosition().distance(lastTargetPosition) <= 2) {
-                entityCreature.getNavigator().setPathTo(null);
-                return;
-            }
-
-            entityCreature.getNavigator().setPathTo(lastTargetPosition.add(0, 1, 0));
-        }
-
-        @Override
-        public boolean shouldEnd() {
-            return target == null || target.isRemoved()
-                    || target.getPosition().distance(entityCreature.getPosition()) < 2;
-        }
-
-        @Override
-        public void end() {
-            this.entityCreature.getNavigator().setPathTo(null);
-        }
-
-    }
 }

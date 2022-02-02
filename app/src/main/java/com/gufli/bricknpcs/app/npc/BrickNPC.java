@@ -5,7 +5,6 @@ import com.gufli.bricknpcs.api.npc.NPCSpawn;
 import com.gufli.bricknpcs.api.npc.NPCTemplate;
 import com.gufli.bricknpcs.api.trait.Trait;
 import com.gufli.bricknpcs.api.trait.TraitRegistry;
-import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.LivingEntity;
@@ -18,15 +17,15 @@ import java.util.Set;
 
 public class BrickNPC implements NPC {
 
-    protected final LivingEntity entity;
+    protected final EntityCreature entity;
     protected final NPCSpawn spawn;
     protected final Set<Trait> traits = new HashSet<>();
 
-    protected BrickNPC(NPCSpawn spawn, LivingEntity entity) {
+    protected BrickNPC(NPCSpawn spawn, EntityCreature entity) {
         this.spawn = spawn;
         this.entity = entity;
 
-        TraitRegistry.factories(spawn.template()).forEach(factory -> traits.add(factory.create(entity)));
+        TraitRegistry.factories(spawn.template()).forEach(factory -> traits.add(factory.create(this)));
 
         entity.setAutoViewable(true);
         refresh();
@@ -39,14 +38,14 @@ public class BrickNPC implements NPC {
         this(spawn, create(instance, spawn.template().type()));
     }
 
-    private static LivingEntity create(Instance instance, EntityType type) {
-        LivingEntity entity = new EntityCreature(type);
+    private static EntityCreature create(Instance instance, EntityType type) {
+        EntityCreature entity = new EntityCreature(type);
         entity.setInstance(instance);
         return entity;
     }
 
     @Override
-    public Entity entity() {
+    public EntityCreature entity() {
         return entity;
     }
 
@@ -97,7 +96,7 @@ public class BrickNPC implements NPC {
         });
 
         templateTraits.stream().filter(name -> traits.stream().noneMatch(trait -> trait.name().equals(name)))
-                .forEach(name -> TraitRegistry.trait(name).ifPresent(factory -> addTrait(factory.create(entity))));
+                .forEach(name -> TraitRegistry.trait(name).ifPresent(factory -> addTrait(factory.create(this))));
     }
 
     public void tick() {
