@@ -8,6 +8,7 @@ import com.gufli.pathfinding.pathfinder.VectorPath;
 import com.gufli.pathfinding.pathfinder.math.Vector;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.Player;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.particle.ParticleCreator;
 import net.minestom.server.utils.PacketUtils;
@@ -67,25 +68,35 @@ public class FollowClosestPlayerTrait extends Trait {
 
         if (navigator.currentPath() != null) {
             VectorPath vp = (VectorPath) navigator.currentPath();
-            for (Vector vec : vp.path()) {
-//                Vector vec = vp.currentVector();
+            Vector cvec = vp.currentVector();
+
+            for ( Vector vec : vp.path() ) {
+                if ( vec == cvec ) continue;
                 PacketUtils.broadcastPacket(ParticleCreator.createParticlePacket(Particle.CRIT,
                         vec.blockX() + .5, vec.blockY() + .5, vec.blockZ() + .5,
                         0, 0, 0, 1));
             }
+
+            PacketUtils.broadcastPacket(ParticleCreator.createParticlePacket(Particle.FLAME,
+                    cvec.blockX() + .5, cvec.blockY() + .5, cvec.blockZ() + .5,
+                    0, 0, 0, 1));
+
+            if (previousTargetPosition != null
+                    && previousTargetPosition.blockX() == target.getPosition().blockX()
+                    && previousTargetPosition.blockY() == target.getPosition().blockY()
+                    && previousTargetPosition.blockZ() == target.getPosition().blockZ()) {
+                return;
+            }
         }
 
-        if (previousTargetPosition != null
-                && previousTargetPosition.blockX() == target.getPosition().blockX()
-                && previousTargetPosition.blockY() == target.getPosition().blockY()
-                && previousTargetPosition.blockZ() == target.getPosition().blockZ()
-        ) {
+        double dist = target.getPosition().distance(npc.entity().getPosition());
+        if ( dist < 1.5d ) {
             return;
         }
 
         this.previousTargetPosition = target.getPosition();
         navigator.pathTo(target.getPosition());
-        npc.entity().getNavigator().setPathTo(target.getPosition());
+        //npc.entity().getNavigator().setPathTo(target.getPosition());
     }
 
 }
