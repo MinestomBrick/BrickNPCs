@@ -19,7 +19,7 @@ public class SpawnEditLookhereCommand extends BrickCommand {
     public SpawnEditLookhereCommand() {
         super("lookhere");
 
-        setCondition(b -> b.permission("bricknpcs.template.edit.skin").playerOnly());
+        setCondition(b -> b.permission("bricknpcs.spawn.edit.lookhere").playerOnly());
 
         ArgumentSpawn spawnArg = new ArgumentSpawn("spawn");
         setInvalidArgumentMessage(spawnArg, "cmd.error.args.spawn");

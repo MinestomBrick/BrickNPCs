@@ -10,5 +10,6 @@ public class SpawnEditCommand extends BrickCommand {
         setupCommandGroupDefaults();
 
         addSubcommand(new SpawnEditLookhereCommand());
+        addSubcommand(new SpawnEditTeleporthereCommand());
     }
 }

@@ -4,5 +4,5 @@ include 'api'
 include 'app'
 include 'scripts'
 
-includeBuild '../BrickPathfinding'
+includeBuild '../BrickEntityNavigator'
 

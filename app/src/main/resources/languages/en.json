@@ -48,5 +48,8 @@
   "cmd.spawn.edit.lookhere.usage": "Invalid usage, try this: /bn spawn edit lookhere <spawn>",
   "cmd.spawn.edit.lookhere": "Updated {0} to look in your direction.",
 
+  "cmd.spawn.edit.teleporthere.usage": "Invalid usage, try this: /bin spawn edit teleporthere <spawn>",
+  "cmd.spawn.edit.lookhere": "Updated {0} to your position.",
+
   "cmd.spawn.list": "List of spawns: {0}"
 }

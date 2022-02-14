@@ -29,7 +29,7 @@ public class FollowClosestPlayerTrait extends Trait {
     //
 
     private Entity target;
-    private MinestomNavigator pathFinder;
+    private MinestomNavigator navigator;
 
     private Pos previousTargetPosition;
     private Instant previous;
@@ -44,7 +44,7 @@ public class FollowClosestPlayerTrait extends Trait {
 
     @Override
     public void onEnable() {
-        this.pathFinder = new MinestomNavigator(npc.entity());
+        this.navigator = new MinestomNavigator(npc.entity());
     }
 
     @Override
@@ -57,22 +57,22 @@ public class FollowClosestPlayerTrait extends Trait {
         }
 
         if (npc.entity().getPosition().distance(target.getPosition()) > 40) {
-            pathFinder.reset();
+            navigator.reset();
             this.target = null;
             return;
         }
 
-        pathFinder.update();
+        navigator.update();
         npc.entity().lookAt(target);
 
-        if (pathFinder.currentPath() != null) {
-            VectorPath vp = (VectorPath) pathFinder.currentPath();
-//            for (Vector vec : vp.path() ) {
-            Vector vec = vp.currentVector();
-            PacketUtils.broadcastPacket(ParticleCreator.createParticlePacket(Particle.CRIT,
-                    vec.blockX() + .5, vec.blockY() + .5, vec.blockZ() + .5,
-                    0, 0, 0, 1));
-//            }
+        if (navigator.currentPath() != null) {
+            VectorPath vp = (VectorPath) navigator.currentPath();
+            for (Vector vec : vp.path()) {
+//                Vector vec = vp.currentVector();
+                PacketUtils.broadcastPacket(ParticleCreator.createParticlePacket(Particle.CRIT,
+                        vec.blockX() + .5, vec.blockY() + .5, vec.blockZ() + .5,
+                        0, 0, 0, 1));
+            }
         }
 
         if (previousTargetPosition != null
@@ -84,8 +84,8 @@ public class FollowClosestPlayerTrait extends Trait {
         }
 
         this.previousTargetPosition = target.getPosition();
-        pathFinder.pathTo(target.getPosition());
-//        npc.entity().getNavigator().setPathTo(target.getPosition());
+        navigator.pathTo(target.getPosition());
+        npc.entity().getNavigator().setPathTo(target.getPosition());
     }
 
 }
