@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"org.minestombrick.npcs.api"},{"l":"org.minestombrick.npcs.api.npc"},{"l":"org.minestombrick.npcs.api.trait"},{"l":"org.minestombrick.npcs.api.traits"}];updateSearchResults();
