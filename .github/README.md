@@ -4,7 +4,7 @@ An extension for [Minestom](https://github.com/Minestom/Minestom) to create pers
 
 ## Install
 
-Get the [release](/releases)
+Get the [release](https://github.com/MinestomBrick/BrickNPCs/releases)
 and place it in the extension folder of your minestom server.
 
 ### Dependencies
@@ -53,7 +53,7 @@ You can change the database settings in the `config.json`.
 ```json
 {
   "database": {
-    "dsn": "jdbc:h2:file:./extensions/BrickPermissions/data/database.h2",
+    "dsn": "jdbc:h2:file:./extensions/BrickNPCs/data/database.h2",
     "username": "dbuser",
     "password": "dbuser"
   }
