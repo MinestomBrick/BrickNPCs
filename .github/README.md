@@ -4,9 +4,12 @@ An extension for [Minestom](https://github.com/Minestom/Minestom) to create pers
 
 ## Install
 
-Get the latest jar file from [Github actions](https://github.com/MinestomBrick/BrickWorlds/actions) 
+Get the [release](./releases)
 and place it in the extension folder of your minestom server.
 
+### Dependencies
+* [BrickI18n](https://github.com/MinestomBrick/BrickI18n)
+* 
 ## Usage
 ### Templates
 
@@ -62,11 +65,20 @@ MySQL is supported, use the following format:
 "dsn": "jdbc:mysql://<hostname>:<ip>/<database>"
 ````
 
-## Credits
+## API
 
-* The [Minestom](https://github.com/Minestom/Minestom) project
+### Maven
+```
+repositories {
+    maven { url "https://repo.jorisg.com/snapshots" }
+}
 
-## Contributing
+dependencies {
+    implementation 'org.minestombrick.npcs:api:1.0-SNAPSHOT'
+}
+```
 
-Check our [contributing info](CONTRIBUTING.md)
+### Usage
+
+Check the [javadocs](https://minestombrick.github.io/BrickNPCs/)
 

@@ -1,12 +1,13 @@
 plugins {
     id 'java'
+    id 'maven-publish'
 }
 
 dependencies {
     compileOnly 'com.github.Minestom:Minestom:-SNAPSHOT'
 
-    implementation 'com.gufli.pathfinding:common:1.0-SNAPSHOT'
-    implementation 'com.gufli.pathfinding:minestom:1.0-SNAPSHOT'
+    implementation 'org.minestombrick.entitynavigator:common:1.0-SNAPSHOT'
+    implementation 'org.minestombrick.entitynavigator:minestom:1.0-SNAPSHOT'
 }
 
 publishing {

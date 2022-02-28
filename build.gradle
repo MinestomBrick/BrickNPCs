@@ -2,7 +2,7 @@ plugins {
     id 'java'
 }
 
-group 'com.gufli.bricknpcs'
+group 'org.minestombrick.npcs'
 version '1.0-SNAPSHOT'
 
 compileJava {
@@ -12,7 +12,6 @@ compileJava {
 
 subprojects {
     apply plugin: 'java'
-    apply plugin: 'maven-publish'
 
     sourceCompatibility = 1.17
     targetCompatibility = 1.17

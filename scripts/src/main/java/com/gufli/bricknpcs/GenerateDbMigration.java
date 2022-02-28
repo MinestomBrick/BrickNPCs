@@ -1,8 +1,7 @@
 package com.gufli.bricknpcs;
 
-import com.gufli.bricknpcs.app.data.BrickNPCsDatabaseContext;
-import com.gufli.brickutils.database.converters.PosConverter;
-import com.gufli.brickutils.database.migration.MigrationGenerator;
+import org.minestombrick.ebean.migration.MigrationGenerator;
+import org.minestombrick.npcs.app.data.BrickNPCsDatabaseContext;
 import io.ebean.annotation.Platform;
 
 import java.io.IOException;

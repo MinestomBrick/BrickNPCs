@@ -1,0 +1,26 @@
+name: Gradle test, build and upload artifact
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    uses: MinestomBrick/.github/.github/workflows/java-gradle-test.yml@main
+
+  publish:
+    needs: test
+    uses: MinestomBrick/.github/.github/workflows/java-gradle-publish.yml@main
+    secrets:
+      JORISG_REPO_USERNAME: ${{ secrets.JORISG_REPO_USERNAME }}
+      JORISG_REPO_PASSWORD: ${{ secrets.JORISG_REPO_PASSWORD }}
+
+  javadoc:
+    needs: test
+    uses: MinestomBrick/.github/.github/workflows/java-gradle-javadoc.yml@main
+
+  pre-release:
+    needs: test
+    uses: MinestomBrick/.github/.github/workflows/java-gradle-github-release.yml@main
