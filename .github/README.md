@@ -4,12 +4,13 @@ An extension for [Minestom](https://github.com/Minestom/Minestom) to create pers
 
 ## Install
 
-Get the [release](./releases)
+Get the [release](/releases)
 and place it in the extension folder of your minestom server.
 
 ### Dependencies
 * [BrickI18n](https://github.com/MinestomBrick/BrickI18n)
-* 
+
+
 ## Usage
 ### Templates
 
